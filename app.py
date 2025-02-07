@@ -8,7 +8,7 @@ app = Flask(__name__)
 def create_pdf(result):
     pdf = FPDF()
     pdf.add_page()
-    pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
+    pdf.add_font('DejaVu', '', 'static/fonts/DejaVuSansCondensed.ttf', uni=True)
     pdf.set_font('DejaVu', '', 12)
     
     pdf.cell(0, 10, 'Результаты расчета:', ln=True)
