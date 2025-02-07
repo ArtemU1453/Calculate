@@ -65,7 +65,7 @@
                         <p>Требуется рулонов: {{ result.rolls_needed }} шт.</p>
                         <p>Количество запусков: {{ result.material_length_needed }} шт.</p>
                         {% endif %}
-                        <p>Общая площадь материала: {{ result.total_area }} м²</p>
+                        <p>Общая площадь материала израсходовано для производства: {{ result.total_area }} м²</p>
                         <p>Полезная площадь в рулонах: {{ result.useful_area }} м²</p>
                         <p>Площадь отходов: {{ result.waste_area }} м²</p>
                         <p>Коэффициент использования: {{ "%.1f"|format(result.useful_area / result.total_area * 100) }}%</p>
