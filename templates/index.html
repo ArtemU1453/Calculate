@@ -14,23 +14,19 @@
                 <h2 class="card-title text-center mb-4">Калькулятор нарезки</h2>
                 <form method="POST" action="/">
                     <div class="mb-3">
-                        <label for="material_width" class="form-label">Ширина материала (500-910 мм)</label>
+                        <label for="material_width" class="form-label">Общая ширина материала (500-910 мм)</label>
                         <input type="number" class="form-control" id="material_width" name="material_width" 
                                min="500" max="910" required>
                     </div>
                     <div class="mb-3">
-                        <label for="target_width" class="form-label">Требуемая ширина рулона</label>
-                        <select class="form-select" id="target_width" name="target_width" required>
-                            <option value="">Выберите ширину</option>
-                            {% for width in available_widths %}
-                            <option value="{{ width }}">{{ width }} мм</option>
-                            {% endfor %}
-                        </select>
+                        <label for="target_width" class="form-label">Полезная ширина для нарезки (мм)</label>
+                        <input type="number" class="form-control" id="target_width" name="target_width" 
+                               min="10" required>
                     </div>
                     <div class="mb-3">
-                        <label for="quantity" class="form-label">Количество рулонов</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" 
-                               min="1" required>
+                        <label for="length" class="form-label">Длина материала (30-1100 м)</label>
+                        <input type="number" class="form-control" id="length" name="length" 
+                               min="30" max="1100" step="0.1" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Рассчитать</button>
                 </form>
@@ -47,7 +43,10 @@
                         <p>Дополнительный размер: {{ result.additional_width }} мм × {{ result.additional_count }} шт.</p>
                         {% endif %}
                         <p>Остаток (отход): {{ result.waste }} мм</p>
-                        <p>Необходимое количество заготовок: {{ result.sets_needed }}</p>
+                        <p>Длина материала: {{ result.length }} м</p>
+                        <p>Общая площадь материала: {{ result.total_area }} м²</p>
+                        <p>Полезная площадь в рулонах: {{ result.useful_area }} м²</p>
+                        <p>Коэффициент использования: {{ "%.1f"|format(result.useful_area / result.total_area * 100) }}%</p>
                     </div>
 
                     <!-- Визуализация схемы нарезки -->
