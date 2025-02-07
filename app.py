@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Допустимые значения ширины рулонов
 ALLOWED_WIDTHS = [20, 25, 30, 32.5, 35, 40, 44, 50, 55, 60, 63, 70, 74, 80, 84, 90, 94, 100, 104, 110, 120, 150]
 
-def calculate_optimal_cutting(material_width: int, useful_width: int, target_width: float, length: float) -> dict:
+def calculate_optimal_cutting(material_width: int, useful_width: int, target_width: float, length: float, rolls_needed: int = None) -> dict:
     """
     Calculate optimal cutting pattern for rolls
     """
@@ -44,7 +44,8 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
         "waste_per_side": waste_per_side,  # Отход на каждую сторону
         "length": length,
         "total_area": round(total_area, 2),
-        "useful_area": round((target_width * max_rolls / 1000) * length, 2)
+        "useful_area": round((target_width * max_rolls / 1000) * length, 2),
+        "rolls_per_length": max_rolls,  # Количество рулонов с одного метра материала
     }
 
     # Проверяем возможность добавления дополнительного рулона
@@ -64,6 +65,12 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
         best_combination["additional_count"] = 1
         best_combination["waste"] = best_width["waste"] + edge_waste  # Добавляем отход по краям
         best_combination["useful_area"] += round((best_width["width"] / 1000) * length, 2)
+        best_combination["rolls_per_length"] += 1
+
+    # Если указано необходимое количество рулонов, рассчитываем необходимую длину материала
+    if rolls_needed:
+        best_combination["rolls_needed"] = rolls_needed
+        best_combination["material_length_needed"] = math.ceil(rolls_needed / best_combination["rolls_per_length"])
 
     return best_combination
 
@@ -76,8 +83,10 @@ def index():
             useful_width = int(request.form.get('useful_width', 0))
             target_width = float(request.form.get('target_width', 0))
             length = float(request.form.get('length', 0))
+            rolls_needed = int(request.form.get('rolls_needed', 0) or 0)
 
-            result = calculate_optimal_cutting(material_width, useful_width, target_width, length)
+            result = calculate_optimal_cutting(material_width, useful_width, target_width, length, 
+                                            rolls_needed if rolls_needed > 0 else None)
         except ValueError:
             result = {"error": "Пожалуйста, введите корректные числовые значения"}
 
