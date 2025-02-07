@@ -13,8 +13,8 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
     if not (500 <= material_width <= 910):
         return {"error": "Ширина материала должна быть от 500 до 910 мм"}
 
-    if not (500 <= useful_width <= material_width):
-        return {"error": f"Полезная ширина должна быть от 500 мм до {material_width} мм"}
+    if not (500 <= useful_width <= 910):
+        return {"error": "Полезная ширина должна быть от 500 до 910 мм"}
 
     if not (30 <= length <= 1100):
         return {"error": "Длина материала должна быть от 30 до 1100 метров"}
