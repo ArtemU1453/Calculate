@@ -19,7 +19,12 @@
                                min="500" max="910" required>
                     </div>
                     <div class="mb-3">
-                        <label for="target_width" class="form-label">Полезная ширина для нарезки (мм)</label>
+                        <label for="useful_width" class="form-label">Полезная ширина для нарезки (мм)</label>
+                        <input type="number" class="form-control" id="useful_width" name="useful_width" 
+                               min="500" max="890" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="target_width" class="form-label">Ширина рулона (мм)</label>
                         <select class="form-select" id="target_width" name="target_width" required>
                             <option value="">Выберите ширину</option>
                             {% for width in allowed_widths %}
@@ -46,7 +51,9 @@
                         {% if result.additional_width %}
                         <p>Дополнительный размер: {{ result.additional_width }} мм × {{ result.additional_count }} шт.</p>
                         {% endif %}
-                        <p>Остаток (отход): {{ result.waste }} мм</p>
+                        <p>Общая ширина материала: {{ result.material_width }} мм</p>
+                        <p>Полезная ширина: {{ result.useful_width }} мм</p>
+                        <p>Отход по краям: {{ "%.1f"|format(result.waste_per_side) }} мм с каждой стороны</p>
                         <p>Длина материала: {{ result.length }} м</p>
                         <p>Общая площадь материала: {{ result.total_area }} м²</p>
                         <p>Полезная площадь в рулонах: {{ result.useful_area }} м²</p>
@@ -57,7 +64,7 @@
                     <div class="cutting-visualization mt-4">
                         <h4 class="h6 mb-3">Схема нарезки:</h4>
                         <div class="material-strip">
-                            {% if result.waste > 0 %}
+                            {% if result.waste_per_side > 0 %}
                             <div class="roll waste-roll" title="Отход: {{ '%.1f'|format(result.waste_per_side) }} мм">
                                 <span class="roll-label">{{ '%.1f'|format(result.waste_per_side) }}</span>
                             </div>
@@ -75,7 +82,7 @@
                             </div>
                             {% endif %}
 
-                            {% if result.waste > 0 %}
+                            {% if result.waste_per_side > 0 %}
                             <div class="roll waste-roll" title="Отход: {{ '%.1f'|format(result.waste_per_side) }} мм">
                                 <span class="roll-label">{{ '%.1f'|format(result.waste_per_side) }}</span>
                             </div>
