@@ -52,7 +52,7 @@
                     <div class="alert alert-danger">{{ result.error }}</div>
                     {% else %}
                     <div class="results">
-                        <p>Основной размер: {{ result.main_width }} мм × {{ result.main_count }} шт.</p>
+                        <p>Количество рулонов в запуске: {{ result.main_width }} мм × {{ result.main_count }} шт.</p>
                         {% if result.additional_width %}
                         <p>Дополнительный размер: {{ result.additional_width }} мм × {{ result.additional_count }} шт.</p>
                         {% endif %}
