@@ -56,8 +56,6 @@
                         {% if result.additional_width %}
                         <p>Дополнительный размер: {{ result.additional_width }} мм × {{ result.additional_count }} шт.</p>
                         {% endif %}
-                        <p>Общая ширина материала: {{ result.material_width }} мм</p>
-                        <p>Полезная ширина: {{ result.useful_width }} мм</p>
                         <p>Отход по краям: {{ "%.1f"|format(result.waste_per_side) }} мм с каждой стороны</p>
                         <p>Метраж намотки: {{ result.length }} м</p>
                         <p>Количество рулонов в запуске: {{ result.rolls_per_length }} шт.</p>
