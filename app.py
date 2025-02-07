@@ -20,7 +20,7 @@ def calculate_optimal_cutting(material_width: int, target_width: float, length: 
         return {"error": "Выбранная ширина не соответствует допустимым значениям"}
 
     # Вычисляем максимальное количество рулонов основной ширины
-    max_rolls = material_width // target_width
+    max_rolls = int(material_width // target_width)  # Округляем до целого числа
     remaining_width = material_width % target_width
 
     # Общая площадь материала (в кв. метрах)
