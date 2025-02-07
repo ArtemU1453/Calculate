@@ -72,6 +72,11 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
         best_combination["rolls_needed"] = rolls_needed
         best_combination["material_length_needed"] = math.ceil(rolls_needed / best_combination["rolls_per_length"])
 
+    # Расчет площади отходов
+    waste_width = best_combination["waste"]  # общая ширина отходов в мм
+    waste_area = (waste_width / 1000) * length  # площадь отходов в м²
+    best_combination["waste_area"] = round(waste_area, 2)
+    
     return best_combination
 
 @app.route('/', methods=['GET', 'POST'])
