@@ -75,7 +75,17 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
     # Расчет площади отходов
     waste_width = best_combination["waste"]  # общая ширина отходов в мм
     waste_area = (waste_width / 1000) * length  # площадь отходов в м²
+    
+    # Учитываем количество запусков при расчете площади отходов
+    if "material_length_needed" in best_combination:
+        waste_area *= best_combination["material_length_needed"]
+        
     best_combination["waste_area"] = round(waste_area, 2)
+    
+    # Обновляем общую площадь материала с учетом количества запусков
+    if "material_length_needed" in best_combination:
+        best_combination["total_area"] = round((material_width / 1000) * length * best_combination["material_length_needed"], 2)
+        best_combination["useful_area"] = round(best_combination["useful_area"] * best_combination["material_length_needed"], 2)
     
     return best_combination
 
