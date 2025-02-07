@@ -70,23 +70,36 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
     # Если указано необходимое количество рулонов, рассчитываем необходимую длину материала
     if rolls_needed:
         best_combination["rolls_needed"] = rolls_needed
-        best_combination["material_length_needed"] = math.ceil(rolls_needed / best_combination["rolls_per_length"])
+        # Учитываем только основной размер при расчете необходимой длины
+        material_length_needed = math.ceil(rolls_needed / best_combination["main_count"])
+        best_combination["material_length_needed"] = material_length_needed
+
+        # Расчет общего количества произведенных рулонов основного размера
+        total_main_rolls = material_length_needed * best_combination["main_count"]
+
+        # Расчет дополнительных рулонов на склад
+        additional_rolls = 0
+        if best_combination["additional_count"] > 0:
+            additional_rolls = material_length_needed * best_combination["additional_count"]
+
+        # Расчет излишков основного размера и добавление дополнительных рулонов
+        best_combination["stock_rolls"] = (total_main_rolls - rolls_needed) + additional_rolls
 
     # Расчет площади отходов
     waste_width = best_combination["waste"]  # общая ширина отходов в мм
     waste_area = (waste_width / 1000) * length  # площадь отходов в м²
-    
+
     # Учитываем количество запусков при расчете площади отходов
     if "material_length_needed" in best_combination:
         waste_area *= best_combination["material_length_needed"]
-        
+
     best_combination["waste_area"] = round(waste_area, 2)
-    
+
     # Обновляем общую площадь материала с учетом количества запусков
     if "material_length_needed" in best_combination:
         best_combination["total_area"] = round((material_width / 1000) * length * best_combination["material_length_needed"], 2)
         best_combination["useful_area"] = round(best_combination["useful_area"] * best_combination["material_length_needed"], 2)
-    
+
     return best_combination
 
 @app.route('/', methods=['GET', 'POST'])
