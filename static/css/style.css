@@ -63,3 +63,76 @@
 .btn-dark:hover {
     background-color: var(--bs-gray-700);
 }
+
+/* Стили для визуализации схемы нарезки */
+.cutting-visualization {
+    background-color: var(--bs-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.material-strip {
+    display: flex;
+    align-items: stretch;
+    min-height: 60px;
+    border: 2px solid var(--bs-border-color);
+    border-radius: 0.25rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.roll {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-right: 1px solid var(--bs-border-color);
+    flex-shrink: 0;
+}
+
+.roll-label {
+    font-size: 0.8rem;
+    color: var(--bs-light);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+}
+
+.main-roll {
+    background-color: var(--bs-primary);
+    opacity: 0.7;
+}
+
+.additional-roll {
+    background-color: var(--bs-success);
+    opacity: 0.7;
+}
+
+.waste-roll {
+    background-color: var(--bs-danger);
+    opacity: 0.7;
+}
+
+.total-width {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--bs-light);
+    margin-top: 0.5rem;
+}
+
+.roll:last-child {
+    border-right: none;
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+    .material-strip {
+        min-height: 50px;
+    }
+
+    .roll-label {
+        font-size: 0.7rem;
+    }
+}

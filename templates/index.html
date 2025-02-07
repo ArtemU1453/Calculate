@@ -49,6 +49,33 @@
                         <p>Остаток (отход): {{ result.waste }} мм</p>
                         <p>Необходимое количество заготовок: {{ result.sets_needed }}</p>
                     </div>
+
+                    <!-- Визуализация схемы нарезки -->
+                    <div class="cutting-visualization mt-4">
+                        <h4 class="h6 mb-3">Схема нарезки:</h4>
+                        <div class="material-strip">
+                            {% for i in range(result.main_count) %}
+                            <div class="roll main-roll" title="{{ result.main_width }} мм">
+                                <span class="roll-label">{{ result.main_width }}</span>
+                            </div>
+                            {% endfor %}
+
+                            {% if result.additional_width %}
+                            <div class="roll additional-roll" title="{{ result.additional_width }} мм">
+                                <span class="roll-label">{{ result.additional_width }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if result.waste > 0 %}
+                            <div class="roll waste-roll" title="Отход: {{ result.waste }} мм">
+                                <span class="roll-label">{{ result.waste }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="total-width">
+                            <span>Общая ширина: {{ result.material_width }} мм</span>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
                 {% endif %}
