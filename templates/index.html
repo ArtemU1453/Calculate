@@ -1,88 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="ru" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
+    <title>Калькулятор нарезки</title>
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container min-vh-100 d-flex align-items-center justify-content-center">
-        <div class="calculator card shadow">
+        <div class="calculator-container card shadow">
             <div class="card-body">
-                <div class="display mb-3">
-                    <input type="text" class="form-control form-control-lg text-end" id="display" readonly>
+                <h2 class="card-title text-center mb-4">Калькулятор нарезки</h2>
+                <form method="POST" action="/">
+                    <div class="mb-3">
+                        <label for="material_width" class="form-label">Ширина материала (500-910 мм)</label>
+                        <input type="number" class="form-control" id="material_width" name="material_width" 
+                               min="500" max="910" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="target_width" class="form-label">Требуемая ширина рулона</label>
+                        <select class="form-select" id="target_width" name="target_width" required>
+                            <option value="">Выберите ширину</option>
+                            {% for width in available_widths %}
+                            <option value="{{ width }}">{{ width }} мм</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Количество рулонов</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" 
+                               min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Рассчитать</button>
+                </form>
+
+                {% if result %}
+                <div class="mt-4">
+                    <h3 class="h5 mb-3">Результат расчета:</h3>
+                    {% if result.error %}
+                    <div class="alert alert-danger">{{ result.error }}</div>
+                    {% else %}
+                    <div class="results">
+                        <p>Основной размер: {{ result.main_width }} мм × {{ result.main_count }} шт.</p>
+                        {% if result.additional_width %}
+                        <p>Дополнительный размер: {{ result.additional_width }} мм × {{ result.additional_count }} шт.</p>
+                        {% endif %}
+                        <p>Остаток (отход): {{ result.waste }} мм</p>
+                        <p>Необходимое количество заготовок: {{ result.sets_needed }}</p>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="buttons">
-                    <div class="row g-2">
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="clearDisplay()">C</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="appendOperator('/')">/</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="appendOperator('*')">×</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="backspace()">⌫</button>
-                        </div>
-                    </div>
-                    <div class="row g-2 mt-1">
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('7')">7</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('8')">8</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('9')">9</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="appendOperator('-')">-</button>
-                        </div>
-                    </div>
-                    <div class="row g-2 mt-1">
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('4')">4</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('5')">5</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('6')">6</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-secondary w-100" onclick="appendOperator('+')">+</button>
-                        </div>
-                    </div>
-                    <div class="row g-2 mt-1">
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('1')">1</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('2')">2</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('3')">3</button>
-                        </div>
-                        <div class="col-3 row-span-2">
-                            <button class="btn btn-primary h-100 w-100" onclick="calculate()">=</button>
-                        </div>
-                    </div>
-                    <div class="row g-2 mt-1">
-                        <div class="col-9">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('0')">0</button>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-dark w-100" onclick="appendNumber('.')">.</button>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/calculator.js') }}"></script>
 </body>
 </html>
