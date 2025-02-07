@@ -70,7 +70,10 @@ def calculate_optimal_cutting(material_width: int, useful_width: int, target_wid
     # Если указано необходимое количество рулонов, рассчитываем необходимую длину материала
     if rolls_needed:
         best_combination["rolls_needed"] = rolls_needed
-        best_combination["material_length_needed"] = math.ceil(rolls_needed / best_combination["rolls_per_length"])
+        material_length_needed = math.ceil(rolls_needed / best_combination["rolls_per_length"])
+        best_combination["material_length_needed"] = material_length_needed
+        total_produced_rolls = material_length_needed * best_combination["rolls_per_length"]
+        best_combination["stock_rolls"] = total_produced_rolls - rolls_needed
 
     # Расчет площади отходов
     waste_width = best_combination["waste"]  # общая ширина отходов в мм
