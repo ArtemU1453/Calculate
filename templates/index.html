@@ -54,6 +54,12 @@
                     <div class="cutting-visualization mt-4">
                         <h4 class="h6 mb-3">Схема нарезки:</h4>
                         <div class="material-strip">
+                            {% if result.waste > 0 %}
+                            <div class="roll waste-roll" title="Отход: {{ '%.1f'|format(result.waste_per_side) }} мм">
+                                <span class="roll-label">{{ '%.1f'|format(result.waste_per_side) }}</span>
+                            </div>
+                            {% endif %}
+
                             {% for i in range(result.main_count) %}
                             <div class="roll main-roll" title="{{ result.main_width }} мм">
                                 <span class="roll-label">{{ result.main_width }}</span>
@@ -67,8 +73,8 @@
                             {% endif %}
 
                             {% if result.waste > 0 %}
-                            <div class="roll waste-roll" title="Отход: {{ result.waste }} мм">
-                                <span class="roll-label">{{ result.waste }}</span>
+                            <div class="roll waste-roll" title="Отход: {{ '%.1f'|format(result.waste_per_side) }} мм">
+                                <span class="roll-label">{{ '%.1f'|format(result.waste_per_side) }}</span>
                             </div>
                             {% endif %}
                         </div>

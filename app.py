@@ -26,7 +26,8 @@ def calculate_optimal_cutting(material_width: int, target_width: int, quantity: 
         "additional_count": 0,
         "waste": remaining_width,
         "sets_needed": math.ceil(quantity / max_rolls),
-        "material_width": material_width  # Добавляем общую ширину для визуализации
+        "material_width": material_width,  # Добавляем общую ширину для визуализации
+        "waste_per_side": 0  # Добавляем отход на каждую сторону
     }
 
     # Проверяем возможность добавления дополнительного рулона
@@ -38,19 +39,8 @@ def calculate_optimal_cutting(material_width: int, target_width: int, quantity: 
                 best_combination["additional_count"] = 1
                 best_combination["waste"] = new_waste
 
-    # Вычисляем пропорциональную ширину для визуализации
-    total_width = sum([
-        best_combination["main_width"] * best_combination["main_count"],
-        best_combination["additional_width"] if best_combination["additional_width"] else 0,
-        best_combination["waste"]
-    ])
-
-    # Добавляем пропорции для CSS
-    best_combination["proportion"] = {
-        "main": (best_combination["main_width"] / total_width) * 100,
-        "additional": (best_combination["additional_width"] / total_width * 100) if best_combination["additional_width"] else 0,
-        "waste": (best_combination["waste"] / total_width * 100) if best_combination["waste"] else 0
-    }
+    # Распределяем отход на две стороны
+    best_combination["waste_per_side"] = best_combination["waste"] / 2
 
     return best_combination
 
