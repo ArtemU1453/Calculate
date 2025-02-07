@@ -68,7 +68,7 @@
                         {% endif %}
                         <p>Общая площадь материала израсходовано для производства: {{ result.total_area }} м²</p>
                         <p>Площадь готовых рулонов: {{ result.useful_area }} м²</p>
-                        <p>Площадь отходов: {{ result.waste_area }} м²</p>
+                        <p style="color: red;">Площадь отходов: {{ result.waste_area }} м²</p>
                         <p>Коэффициент использования: {{ "%.1f"|format(result.useful_area / result.total_area * 100) }}%</p>
                     </div>
 
