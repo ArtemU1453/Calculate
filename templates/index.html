@@ -33,7 +33,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="length" class="form-label">Длина материала (30-1100 м)</label>
+                        <label for="length" class="form-label">Метраж намотки (30-1100 м)</label>
                         <input type="number" class="form-control" id="length" name="length" 
                                min="30" max="1100" step="0.1" required>
                     </div>
@@ -59,7 +59,7 @@
                         <p>Общая ширина материала: {{ result.material_width }} мм</p>
                         <p>Полезная ширина: {{ result.useful_width }} мм</p>
                         <p>Отход по краям: {{ "%.1f"|format(result.waste_per_side) }} мм с каждой стороны</p>
-                        <p>Длина материала: {{ result.length }} м</p>
+                        <p>Метраж намотки: {{ result.length }} м</p>
                         <p>Количество рулонов с одного метра: {{ result.rolls_per_length }} шт.</p>
                         {% if result.rolls_needed %}
                         <p>Требуется рулонов: {{ result.rolls_needed }} шт.</p>
