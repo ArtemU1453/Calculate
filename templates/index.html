@@ -60,7 +60,7 @@
                         <p>Полезная ширина: {{ result.useful_width }} мм</p>
                         <p>Отход по краям: {{ "%.1f"|format(result.waste_per_side) }} мм с каждой стороны</p>
                         <p>Метраж намотки: {{ result.length }} м</p>
-                        <p>Количество рулонов с одного метра: {{ result.rolls_per_length }} шт.</p>
+                        <p>Количество рулонов в запуске: {{ result.rolls_per_length }} шт.</p>
                         {% if result.rolls_needed %}
                         <p>Требуется рулонов: {{ result.rolls_needed }} шт.</p>
                         <p>Необходимая длина материала: {{ result.material_length_needed }} м</p>
