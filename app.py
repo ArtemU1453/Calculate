@@ -4,7 +4,7 @@ import math
 app = Flask(__name__)
 
 # Допустимые значения ширины рулонов
-ALLOWED_WIDTHS = [20, 25, 30, 32.5, 35, 40, 44, 50, 55, 60, 63, 70, 74, 80, 84, 90, 94, 100, 104, 110, 120, 150]
+ALLOWED_WIDTHS = [25, 30, 32.5, 35, 40, 44, 50, 55, 60, 63, 70, 74, 80, 84, 90, 94, 100, 104, 110, 120, 150]
 
 def calculate_optimal_cutting(material_width: int, useful_width: int, target_width: float, length: float, rolls_needed: int = None) -> dict:
     """
