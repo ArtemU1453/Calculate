@@ -20,8 +20,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="target_width" class="form-label">Полезная ширина для нарезки (мм)</label>
-                        <input type="number" class="form-control" id="target_width" name="target_width" 
-                               min="10" required>
+                        <select class="form-select" id="target_width" name="target_width" required>
+                            <option value="">Выберите ширину</option>
+                            {% for width in allowed_widths %}
+                            <option value="{{ width }}">{{ width }} мм</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="length" class="form-label">Длина материала (30-1100 м)</label>

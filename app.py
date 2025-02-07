@@ -3,7 +3,10 @@ import math
 
 app = Flask(__name__)
 
-def calculate_optimal_cutting(material_width: int, target_width: int, length: float) -> dict:
+# Допустимые значения ширины рулонов
+ALLOWED_WIDTHS = [20, 25, 30, 32.5, 35, 40, 44, 50, 55, 60, 63, 70, 74, 80, 84, 90, 94, 100, 104, 110, 120, 150]
+
+def calculate_optimal_cutting(material_width: int, target_width: float, length: float) -> dict:
     """
     Calculate optimal cutting pattern for rolls
     """
@@ -13,8 +16,8 @@ def calculate_optimal_cutting(material_width: int, target_width: int, length: fl
     if not (30 <= length <= 1100):
         return {"error": "Длина материала должна быть от 30 до 1100 метров"}
 
-    if not (10 <= target_width <= material_width):
-        return {"error": "Полезная ширина должна быть от 10 мм до ширины материала"}
+    if target_width not in ALLOWED_WIDTHS:
+        return {"error": "Выбранная ширина не соответствует допустимым значениям"}
 
     # Вычисляем максимальное количество рулонов основной ширины
     max_rolls = material_width // target_width
@@ -38,17 +41,17 @@ def calculate_optimal_cutting(material_width: int, target_width: int, length: fl
 
     # Проверяем возможность добавления дополнительного рулона
     potential_widths = []
-    for width in range(10, remaining_width + 1):  # Начинаем с минимальной ширины 10мм
+    for width in ALLOWED_WIDTHS:
         if width <= remaining_width:
             new_waste = remaining_width - width
-            if new_waste < best_combination["waste"]:
-                potential_widths.append({
-                    "width": width,
-                    "waste": new_waste
-                })
+            potential_widths.append({
+                "width": width,
+                "waste": new_waste
+            })
 
     if potential_widths:
-        best_width = max(potential_widths, key=lambda x: x["width"])
+        # Выбираем ширину с минимальным отходом
+        best_width = min(potential_widths, key=lambda x: x["waste"])
         best_combination["additional_width"] = best_width["width"]
         best_combination["additional_count"] = 1
         best_combination["waste"] = best_width["waste"]
@@ -65,14 +68,14 @@ def index():
     if request.method == 'POST':
         try:
             material_width = int(request.form.get('material_width', 0))
-            target_width = int(request.form.get('target_width', 0))
+            target_width = float(request.form.get('target_width', 0))
             length = float(request.form.get('length', 0))
 
             result = calculate_optimal_cutting(material_width, target_width, length)
         except ValueError:
             result = {"error": "Пожалуйста, введите корректные числовые значения"}
 
-    return render_template('index.html', result=result)
+    return render_template('index.html', allowed_widths=ALLOWED_WIDTHS, result=result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
