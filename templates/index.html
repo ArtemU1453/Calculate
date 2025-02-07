@@ -52,6 +52,26 @@
                     <div class="alert alert-danger">{{ result.error }}</div>
                     {% else %}
                     <div class="results">
+                        <button onclick="downloadPDF()" class="btn btn-secondary mb-3">Скачать PDF</button>
+                        <script>
+                        function downloadPDF() {
+                            fetch('/download_pdf', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({{ result|tojson|safe }})
+                            })
+                            .then(response => response.blob())
+                            .then(blob => {
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'results.pdf';
+                                a.click();
+                            });
+                        }
+                        </script>
                         <p>Количество рулонов в запуске: {{ result.rolls_per_length }} шт.</p>
                         {% if result.rolls_needed %}
                         <p>Количество запусков: {{ result.material_length_needed }} шт.</p>

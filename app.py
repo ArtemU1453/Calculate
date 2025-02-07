@@ -1,7 +1,39 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
+from fpdf import FPDF
 import math
+import os
 
 app = Flask(__name__)
+
+def create_pdf(result):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
+    pdf.set_font('DejaVu', '', 12)
+    
+    pdf.cell(0, 10, 'Результаты расчета:', ln=True)
+    pdf.ln(5)
+    
+    if result.get('rolls_per_length'):
+        pdf.cell(0, 10, f"Количество рулонов в запуске: {result['rolls_per_length']} шт.", ln=True)
+    if result.get('material_length_needed'):
+        pdf.cell(0, 10, f"Количество запусков: {result['material_length_needed']} шт.", ln=True)
+    if result.get('stock_rolls'):
+        pdf.cell(0, 10, f"Остается на складе: {result['stock_rolls']} шт.", ln=True)
+    
+    pdf.cell(0, 10, f"Основной размер: {result['main_width']} мм × {result['main_count']} шт.", ln=True)
+    if result.get('additional_width'):
+        pdf.cell(0, 10, f"Дополнительный размер: {result['additional_width']} мм × {result['additional_count']} шт.", ln=True)
+    
+    pdf.cell(0, 10, f"Отход по краям: {result['waste_per_side']:.1f} мм с каждой стороны", ln=True)
+    pdf.cell(0, 10, f"Метраж намотки: {result['length']} м", ln=True)
+    pdf.cell(0, 10, f"Общая площадь материала: {result['total_area']} м²", ln=True)
+    pdf.cell(0, 10, f"Площадь готовых рулонов: {result['useful_area']} м²", ln=True)
+    pdf.cell(0, 10, f"Площадь отходов: {result['waste_area']} м²", ln=True)
+    
+    filename = 'results.pdf'
+    pdf.output(filename)
+    return filename
 
 # Допустимые значения ширины рулонов
 ALLOWED_WIDTHS = [25, 30, 32.5, 35, 40, 44, 50, 55, 60, 63, 70, 74, 80, 84, 90, 94, 100, 104, 110, 120, 150]
@@ -119,6 +151,14 @@ def index():
             result = {"error": "Пожалуйста, введите корректные числовые значения"}
 
     return render_template('index.html', allowed_widths=ALLOWED_WIDTHS, result=result)
+
+@app.route('/download_pdf', methods=['POST'])
+def download_pdf():
+    result = request.get_json()
+    if result and not result.get('error'):
+        pdf_file = create_pdf(result)
+        return send_file(pdf_file, as_attachment=True, download_name='results.pdf')
+    return "Error generating PDF", 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
